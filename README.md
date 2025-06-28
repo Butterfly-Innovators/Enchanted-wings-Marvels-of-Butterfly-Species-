@@ -2,7 +2,7 @@
 
 It is a deep learning-powered web application that can classify butterfly species from uploaded images using a trained Convolutional Neural Network (CNN) model.
 
-📌 Features
+## 📌 Features
 🧠 AI-powered butterfly recognition from images
 
 🔍 Predicts top class with confidence score
@@ -11,42 +11,49 @@ It is a deep learning-powered web application that can classify butterfly specie
 
 💡 Built using Flask, TensorFlow/Keras, and HTML/CSS/JS
 
-🚀 How to Run Locally
-1. Clone the repository
-git clone https://github.com/your-username/butterfly.git
-cd butterfly_app
+## 🚀 How to Run Locally
+### 1. Clone the repository
+   
+        git clone https://github.com/your-username/butterfly.git
 
-3. Set up environment
-pip install -r requirements.txt
 
-5. Run the Flask app
-python app.py
-Visit: http://localhost:5000
+### 2. Set up environment
 
-🧠 Model
-Trained on 75 butterfly classes.
+        pip install -r requirements.txt
 
-Uses data augmentation layers: RandomFlip, RandomZoom, RandomRotation, etc.
+### 3. Run the Flask app
 
-Input size: 224x224
+        python app.py
+        Visit: http://localhost:5000
 
-Output: class label and confidence %
+## 🧠 Model
 
-📷 Usage
-Open the website in your browser.
+- Trained on 75 butterfly classes.
 
-Click "Upload Your Image" or drag an image of a butterfly.
+- **Uses data augmentation layers**: RandomFlip, RandomZoom, RandomRotation, etc.
 
-Click Predict.
+- **Input size**: 224x224
 
-View the predicted butterfly species and confidence score.
+- **Output**: class label and confidence %
 
-⚙️ Tech Stack
-Backend: Flask (Python)
+## 📷 Usage
 
-Model: TensorFlow / Keras
+1.Open the website in your browser.
 
-Frontend: HTML5, CSS3, JavaScript
+2.Click "Upload Your Image" or drag an image of a butterfly.
 
-📄 License
+3.Click Predict.
+
+4.View the predicted butterfly species and confidence score.
+
+## ⚙️ Tech Stack
+
+- **Backend**: Flask (Python)
+
+- **Model**: TensorFlow / Keras
+
+- **Frontend**: HTML5, CSS3, JavaScript
+
+## 📄 License
+
 This project is for educational purposes only. All rights reserved by the author.
