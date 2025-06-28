@@ -14,8 +14,7 @@ It is a deep learning-powered web application that can classify butterfly specie
 ## 🚀 How to Run Locally
 ### 1. Clone the repository
    
-        git clone https://github.com/your-username/butterfly.git
-
+        https://github.com/Butterfly-Innovators/Enchanted-wings-Marvels-of-Butterfly-Species-.git
 
 ### 2. Set up environment
 
