@@ -1,32 +1,31 @@
+# 1. app.py (Flask Backend)
 from flask import Flask, request, render_template, jsonify
 import os
 import numpy as np
 from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.layers import RandomHeight, RandomWidth, RandomFlip, RandomZoom, RandomRotation
-
-
+from flask_cors import CORS
 import logging
 
-# Initialize Flask app
 app = Flask(__name__, static_folder='static', template_folder='templates')
-
-
-# Logging setup
+CORS(app) 
 logging.basicConfig(level=logging.INFO)
 
-# Load the trained model with custom layers
-model_path = "/home/rgukt/butterfly_app/my_model/butterfly_model.h5"
+model_path = "my_model/butterfly_model.h5"
 try:
-    model = load_model(model_path, custom_objects={'RandomHeight': RandomHeight,'RandomFlip': RandomFlip,
-    'RandomZoom': RandomZoom,
-    'RandomRotation': RandomRotation,'RandomWidth': RandomWidth})
+    model = load_model(model_path, custom_objects={
+        'RandomHeight': RandomHeight,
+        'RandomFlip': RandomFlip,
+        'RandomZoom': RandomZoom,
+        'RandomRotation': RandomRotation,
+        'RandomWidth': RandomWidth
+    })
     logging.info("✅ Model loaded successfully with custom layers.")
 except Exception as e:
     logging.error("❌ Failed to load model", exc_info=True)
     model = None
 
-# Butterfly class labels
 butterfly_names = {
     0: 'ADONIS', 1: 'AFRICAN GIANT SWALLOWTAIL', 2: 'AMERICAN SNOOT',
     3: 'AN 88', 4: 'APPOLLO', 5: 'ATALA', 6: 'BANDED ORANGE HELICONIAN',
@@ -49,7 +48,6 @@ butterfly_names = {
     71: 'VICEROY', 72: 'WOOD SATYR', 73: 'YELLOW SWALLOW TAIL', 74: 'ZEBRA LONG WING'
 }
 
-# Where uploaded images will be saved
 UPLOAD_FOLDER = os.path.join('static', 'images')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -59,14 +57,18 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    logging.info("🔁 Received a prediction request")
     if model is None:
+        logging.error("🚫 Model is not loaded")
         return jsonify({'error': 'Model not loaded'}), 500
 
     file = request.files.get('image') or request.files.get('file')
     if not file or file.filename == '':
+        logging.error("🚫 No image uploaded or invalid file name")
         return jsonify({'error': 'No image uploaded'}), 400
 
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    logging.info(f"📂 Saving uploaded image to {filepath}")
     file.save(filepath)
 
     try:
@@ -78,6 +80,8 @@ def predict():
         pred_class = np.argmax(preds)
         confidence = float(np.max(preds))
 
+        logging.info(f"✅ Prediction: {butterfly_names.get(pred_class)} ({confidence:.2f})")
+
         result = {
             'class': butterfly_names.get(pred_class, "Unknown"),
             'confidence': confidence,
@@ -86,10 +90,8 @@ def predict():
         return jsonify(result)
 
     except Exception as e:
-        logging.error("❌ Prediction failed", exc_info=True)
+        logging.exception("❌ Prediction failed")
         return jsonify({'error': 'Prediction failed'}), 500
 
-# Run the app on a different port (e.g., 5002)
 if __name__ == '__main__':
-    app.run(debug=True, port=5003)
-
+    app.run(debug=True, port=5000)
